@@ -52,3 +52,20 @@ class BookingClass(Base):
     __table_args__ = (
         engines.Memory(),
     )
+
+
+class BookingBronIncrement(Base):
+    __tablename__ = 'class_bron_increment'
+
+    SDAT_S = Column('SDAT_S', Date, primary_key=True)
+    DTD = Column('DTD', Integer)
+    FLT_NUM = Column('FLT_NUM', Integer)
+    DD = Column('DD', Date)
+    SEG_CLASS_CODE = Column('SEG_CLASS_CODE', String)
+    PASS_BK = Column('PASS_BK', Integer)
+    PASS_BK_prev = Column('PASS_BK_prev', Integer)
+    Increment_day = Column('Increment_day', Integer)
+
+    __table_args__ = (
+        engines.Memory(),
+    )

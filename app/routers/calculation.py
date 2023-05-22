@@ -1,6 +1,12 @@
 from datetime import date
 
+from typing import Optional
+
 from fastapi import Query, APIRouter
+
+from app.database import session
+from app.utils import process_result_data
+from app.models import BookingBronIncrement
 
 router = APIRouter(prefix='/api/v1/calculation', tags=['calculation'])
 
@@ -27,16 +33,60 @@ sample_data = {
 
 @router.get("/booking-dynamics")
 async def get_booking_dynamics(
-        direction: str = Query(..., description="Направление рейса", example="Москва - Сочи"),
+        # direction: str = Query(..., description="Направление рейса", example="Москва - Сочи"),
         flight_number: int = Query(..., description="Номер рейса", example="1120"),
         flight_date: date = Query(..., description="Дата рейса", example="2018-05-29"),
         booking_class: str = Query(..., description="Класс бронирования", example="Y"),
-        booking_period: int = Query(1, description="Период прогнозирования спроса для рейса (в месяцах)", example='1'),
+        booking_start: Optional[date] = Query(None,
+                                              description="Период для просмотра динамики бронирования стартовая дата",
+                                              example='2018-05-29'),
+        booking_end: Optional[date] = Query(None,
+                                            description="Период для просмотра динамики бронирования конечная дата",
+                                            example='2019-12-31')
 
-        booking_start: date = Query(..., description="Период для просмотра динамики бронирования стартовая дата",
-                                    example='2018-05-29'),
-        booking_end: date = Query(..., description="Период для просмотра динамики бронирования конечная дата",
-                                  example='2019-12-31')
+):
+    """
+    Определение динамики бронирований рейса в разрезе
+    классов бронирования по вылетевшим рейсам.
+    """
+    try:
+        query = session.query(BookingBronIncrement.SDAT_S, BookingBronIncrement.Increment_day)
+
+        query = query.filter(
+            BookingBronIncrement.FLT_NUM == flight_number,
+            BookingBronIncrement.DD == flight_date,
+            BookingBronIncrement.SEG_CLASS_CODE == booking_class,
+        )
+
+        labels = []
+        points = []
+
+        for result in query.all():
+            sdat_s = result.SDAT_S
+            increment_day = result.Increment_day
+
+            labels.append(sdat_s)
+            points.append(increment_day)
+
+        res_data = process_result_data(labels, points)
+
+        return {'status': 200, "data": res_data}
+
+    except Exception as e:
+        return {'status': 500, "error": e}
+
+
+@router.get("/seasonality")
+async def get_seasonality(
+        direction: str = Query(..., description="Направление рейса", example="Москва - Сочи"),
+        flight_number: str = Query(..., description="Номер рейса", example="1120"),
+        booking_class: str = Query(..., description="Класс бронирования", example="Y"),
+        booking_start: Optional[date] = Query(None,
+                                              description="Период для просмотра динамики бронирования стартовая дата",
+                                              example='2018-05-29'),
+        booking_end: Optional[date] = Query(None,
+                                            description="Период для просмотра динамики бронирования конечная дата",
+                                            example='2019-12-31')
 ):
     """
     Определение динамики бронирований рейса в разрезе
@@ -45,32 +95,17 @@ async def get_booking_dynamics(
     return sample_data
 
 
-@router.get("/seasonality")
-async def get_seasonality(
-        direction: str = Query(..., description="Направление рейса", example="Москва - Сочи"),
-        flight_number: str = Query(..., description="Номер рейса", example="1120"),
-        booking_class: str = Query(..., description="Класс бронирования", example="Y"),
-        booking_start: date = Query(..., description="Период для просмотра динамики бронирования стартовая дата",
-                                    example='2018-05-29'),
-        booking_end: date = Query(..., description="Период для просмотра динамики бронирования конечная дата",
-                                  example='2019-12-31')
-):
-    """
-    Определение сезонности спроса по классам бронирования, по вылетевшим рейсам.
-    """
-
-    return sample_data
-
-
 @router.get("/demand-profile")
 async def get_demand_profile(
         direction: str = Query(..., description="Направление рейса", example="Москва - Сочи"),
         flight_number: str = Query(..., description="Номер рейса", example="1120"),
         booking_class: str = Query(..., description="Класс бронирования", example="Y"),
-        booking_start: date = Query(..., description="Период для просмотра динамики бронирования стартовая дата",
-                                    example='2018-05-29'),
-        booking_end: date = Query(..., description="Период для просмотра динамики бронирования конечная дата",
-                                  example='2019-12-31')
+        booking_start: Optional[date] = Query(None,
+                                              description="Период для просмотра динамики бронирования стартовая дата",
+                                              example='2018-05-29'),
+        booking_end: Optional[date] = Query(None,
+                                            description="Период для просмотра динамики бронирования конечная дата",
+                                            example='2019-12-31')
 ):
     """
     Определение профилей спроса в разрезе классов бронирования, по вылетевшим рейсам.
@@ -82,10 +117,12 @@ async def get_demand_profile(
 async def get_demand_forecast(
         direction: str = Query(..., description="Направление рейса", example="Москва - Сочи"),
         flight_number: str = Query(..., description="Номер рейса", example="1120"),
-        booking_start: date = Query(..., description="Период для просмотра динамики бронирования стартовая дата",
-                                    example='2018-05-29'),
-        booking_end: date = Query(..., description="Период для просмотра динамики бронирования конечная дата",
-                                  example='2019-12-31')
+        booking_start: Optional[date] = Query(None,
+                                              description="Период для просмотра динамики бронирования стартовая дата",
+                                              example='2018-05-29'),
+        booking_end: Optional[date] = Query(None,
+                                            description="Период для просмотра динамики бронирования конечная дата",
+                                            example='2019-12-31')
 ):
     """
     Прогнозирование спроса в разрезе классов бронирования для продаваемых рейсов.
