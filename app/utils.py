@@ -3,8 +3,8 @@ def process_result_data(labels, points):
     data = {
         "series": [
             {
-                "name": "",
-                "type": "",
+                "name": "booking_dynamic",
+                "type": "line",
                 "data": points,
             }
         ],
