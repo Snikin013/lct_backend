@@ -1,45 +1,94 @@
-def process_result_data(labels, points):
+def process_result_data(dates_receipt, increments_days, pass_bks):
     """Формирование данных для построения графика."""
     data = {
         "series": [
             {
-                "name": "booking_dynamic",
+                "name": "Бронирование за день",
+                "type": "column",
+                "data": increments_days,
+            },
+            {
+                "name": "Суммарное бронирование",
                 "type": "line",
-                "data": points,
-            }
+                "data": pass_bks,
+            },
         ],
         "chart_options": {
             "chart": {
                 "height": 350,
                 "type": "line",
-            },
-            "stroke": {
-                "width": [0, 4],
-            },
-            "title": {
-                "text": "Динамика бронирований рейса в разрезе классов",
+                "stacked": False,
             },
             "dataLabels": {
-                "enabled": True,
-                "enabled_on_series": [1],
+                "enabled": False,
             },
-            "labels": labels,
+            "stroke": {
+                "width": [1, 6, 3],
+                "curve": "straight",
+            },
+            "colors": ["#02458d", "#f37b09"],
+            "grid": {
+                "borderColor": "#e7e7e7",
+                "row": {
+                    "colors": ["#f3f3f3", "transparent"],
+                    "opacity": 0.5,
+                },
+            },
+            "title": {
+                "text": "Динамика бронирования рейса",
+                "align": "left",
+                "offsetX": 110,
+            },
             "xaxis": {
-                "type": "datetime",
+                "categories": dates_receipt,
             },
             "yaxis": [
                 {
-                    "title": {
-                        "text": "Website Blog",
+                    "axisTicks": {
+                        "show": True,
+                    },
+                    "axisBorder": {
+                        "show": True,
+                        "color": "#02458d",
+                    },
+                    "labels": {
+                        "style": {
+                            "colors": "#02458d",
+                        },
+                    },
+                    "tooltip": {
+                        "enabled": "true",
                     },
                 },
                 {
                     "opposite": True,
-                    "title": {
-                        "text": "Social Media",
+                    "axisTicks": {
+                        "show": True,
+                        "color": "#f37b09",
+                    },
+                    "axisBorder": {
+                        "show": True,
+                        "color": "#f37b09",
+                    },
+                    "labels": {
+                        "style": {
+                            "colors": "#f37b09",
+                        },
                     },
                 },
-            ]
+            ],
+            "tooltip": {
+                "fixed": {
+                    "enabled": True,
+                    "position": "topLeft",
+                    "offsetY": 30,
+                    "offsetX": 60,
+                },
+            },
+            "legend": {
+                "horizontalAlign": "left",
+                "offsetX": 40,
+            },
         },
     }
 
