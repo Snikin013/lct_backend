@@ -6,12 +6,12 @@ def process_result_data(dates_receipt, increments_days, pass_bks):
                 {
                     "name": "Суммарное бронирование",
                     "type": "line",
-                    "data": increments_days,
+                    "data": pass_bks,
                 },
                 {
                     "name": "Бронирование за день",
                     "type": "column",
-                    "data": pass_bks,
+                    "data": increments_days,
                 },
             ],
 
