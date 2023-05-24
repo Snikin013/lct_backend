@@ -69,3 +69,16 @@ class BookingBronIncrement(Base):
     __table_args__ = (
         engines.Memory(),
     )
+
+
+class ClassBronSeason(Base):
+    __tablename__ = 'class_bron_season'
+
+    SDAT_S = Column('SDAT_S', Date, primary_key=True)
+    FLT_NUM = Column('FLT_NUM', Integer)
+    SEG_CLASS_CODE = Column('SEG_CLASS_CODE', String)
+    Increment_day = Column('Increment_day', Integer)
+
+    __table_args__ = (
+        engines.Memory(),
+    )

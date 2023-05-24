@@ -1,95 +1,105 @@
 def process_result_data(dates_receipt, increments_days, pass_bks):
     """Формирование данных для построения графика."""
     data = {
-        "series": [
-            {
-                "name": "Бронирование за день",
-                "type": "column",
-                "data": increments_days,
-            },
-            {
-                "name": "Суммарное бронирование",
-                "type": "line",
-                "data": pass_bks,
-            },
-        ],
-        "chart_options": {
-            "chart": {
-                "height": 350,
-                "type": "line",
-                "stacked": False,
-            },
-            "dataLabels": {
-                "enabled": False,
-            },
-            "stroke": {
-                "width": [1, 6, 3],
-                "curve": "straight",
-            },
-            "colors": ["#02458d", "#f37b09"],
-            "grid": {
-                "borderColor": "#e7e7e7",
-                "row": {
-                    "colors": ["#f3f3f3", "transparent"],
-                    "opacity": 0.5,
-                },
-            },
-            "title": {
-                "text": "Динамика бронирования рейса",
-                "align": "left",
-                "offsetX": 110,
-            },
-            "xaxis": {
-                "categories": dates_receipt,
-            },
-            "yaxis": [
+        "series":
+            [
                 {
-                    "axisTicks": {
-                        "show": True,
-                    },
-                    "axisBorder": {
-                        "show": True,
-                        "color": "#02458d",
-                    },
-                    "labels": {
-                        "style": {
-                            "colors": "#02458d",
-                        },
-                    },
-                    "tooltip": {
-                        "enabled": "true",
-                    },
+                    "name": "Суммарное бронирование",
+                    "type": "line",
+                    "data": increments_days,
                 },
                 {
-                    "opposite": True,
-                    "axisTicks": {
-                        "show": True,
-                        "color": "#f37b09",
-                    },
-                    "axisBorder": {
-                        "show": True,
-                        "color": "#f37b09",
-                    },
-                    "labels": {
-                        "style": {
-                            "colors": "#f37b09",
-                        },
-                    },
+                    "name": "Бронирование за день",
+                    "type": "column",
+                    "data": pass_bks,
                 },
             ],
-            "tooltip": {
-                "fixed": {
-                    "enabled": True,
-                    "position": "topLeft",
-                    "offsetY": 30,
-                    "offsetX": 60,
+
+        "chart_options":
+            {
+                "chart": {
+                    "height": 800,
+                    "type": "line",
+                    "stacked": False,
                 },
-            },
-            "legend": {
-                "horizontalAlign": "left",
-                "offsetX": 40,
-            },
-        },
+                "dataLabels": {
+                    "enabled": False,
+                },
+                "stroke": {
+                    "width": [6, 1, 3],
+                    "curve": "straight",
+                },
+                "colors": ["#f37b09", "#02458d"],
+                "grid":
+                    {
+                        "borderColor": "#e7e7e7",
+                        "row": {
+                            "colors": ["#f3f3f3", "transparent"],
+                            "opacity": 0.5,
+                        },
+                    },
+
+                "title":
+                    {
+                        "text": "Динамика бронирования рейса",
+                        "align": "left",
+                        "offsetX": 110,
+                    },
+                "xaxis":
+                    {
+                        "type": "datetime",
+                        "categories": dates_receipt,
+                    },
+                "yaxis":
+                    [
+                        {
+                            "axisTicks": {
+                                "show": True,
+                            },
+                            "axisBorder": {
+                                "show": True,
+                                "color": "#f37b09",
+                            },
+                            "labels": {
+                                "style": {
+                                    "colors": "#f37b09",
+                                },
+                            },
+                            "tooltip": {
+                                "enabled": True,
+                            },
+                        },
+                        {
+                            "opposite": True,
+                            "axisTicks": {
+                                "show": True,
+                            },
+                            "axisBorder": {
+                                "show": True,
+                                "color": "#02458d",
+                            },
+                            "labels": {
+                                "style": {
+                                    "colors": "#02458d",
+                                },
+                            },
+                        },
+                    ],
+                "tooltip":
+                    {
+                        "fixed": {
+                            "enabled": True,
+                            "position": "topLeft",
+                            "offsetY": 30,
+                            "offsetX": 60,
+                        },
+                    },
+                "legend":
+                    {
+                        "horizontalAlign": "left",
+                        "offsetX": 40,
+                    },
+            }
     }
 
     return data

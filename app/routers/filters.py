@@ -43,4 +43,4 @@ async def get_booking_classes():
     query = session.query(distinct(BookingClass.SEG_CLASS_CODE)).all()
     classes = [row[0] for row in query]
 
-    return {"status": 200, "booking_classes": classes}
+    return {"status": 200, "booking_classes": sorted(classes)}

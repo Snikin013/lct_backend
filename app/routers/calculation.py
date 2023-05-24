@@ -85,15 +85,12 @@ async def get_booking_dynamics(
 
 @router.get("/seasonality")
 async def get_seasonality(
-        direction: str = Query(..., description="Направление рейса", example="Москва - Сочи"),
         flight_number: str = Query(..., description="Номер рейса", example="1120"),
         booking_class: str = Query(..., description="Класс бронирования", example="Y"),
-        booking_start: Optional[date] = Query(None,
-                                              description="Период для просмотра динамики бронирования стартовая дата",
-                                              example='2018-05-29'),
-        booking_end: Optional[date] = Query(None,
-                                            description="Период для просмотра динамики бронирования конечная дата",
-                                            example='2019-12-31')
+        booking_period: Optional[int] = Query(1, ge=1, le=12,
+                                              description="Период прогнозирования спроса для рейса (в годах)",
+                                              example='1'),
+
 ):
     """
     Определение динамики бронирований рейса в разрезе
