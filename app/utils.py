@@ -1,4 +1,4 @@
-def process_result_data(dates_receipt, increments_days, pass_bks):
+def process_result_dynamic_data(dates_receipt, increments_days, pass_bks):
     """Формирование данных для построения графика."""
     data = {
         "series":
@@ -18,7 +18,7 @@ def process_result_data(dates_receipt, increments_days, pass_bks):
         "chart_options":
             {
                 "chart": {
-                    "height": 800,
+                    "height": 500,
                     "type": "line",
                     "stacked": False,
                 },
@@ -39,12 +39,6 @@ def process_result_data(dates_receipt, increments_days, pass_bks):
                         },
                     },
 
-                "title":
-                    {
-                        "text": "Динамика бронирования рейса",
-                        "align": "left",
-                        "offsetX": 110,
-                    },
                 "xaxis":
                     {
                         "type": "datetime",
@@ -53,6 +47,7 @@ def process_result_data(dates_receipt, increments_days, pass_bks):
                 "yaxis":
                     [
                         {
+                            "tickAmount": 10,
                             "axisTicks": {
                                 "show": True,
                             },

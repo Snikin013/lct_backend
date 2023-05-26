@@ -4,8 +4,8 @@ from typing import Optional
 from fastapi import Query, APIRouter
 
 from app.database import session
-from app.utils import process_result_data
-from app.models import BookingBronIncrement
+from app.utils import process_result_dynamic_data
+from app.models import BookingBronIncrement, ClassBronSeason
 
 router = APIRouter(prefix='/api/v1/calculation', tags=['calculation'])
 
@@ -75,7 +75,10 @@ async def get_booking_dynamics(
             increments_days.append(increment_day)
             pass_bks.append(pass_bk)
 
-        res_data = process_result_data(dates_receipt, increments_days, pass_bks)
+        if not dates_receipt or not increments_days or not pass_bks:
+            return {'status': 400, 'error': 'Некорректные данные. Один или несколько списков пустые.'}
+
+        res_data = process_result_dynamic_data(dates_receipt, increments_days, pass_bks)
 
         return {'status': 200, "data": res_data}
 
@@ -87,16 +90,51 @@ async def get_booking_dynamics(
 async def get_seasonality(
         flight_number: str = Query(..., description="Номер рейса", example="1120"),
         booking_class: str = Query(..., description="Класс бронирования", example="Y"),
-        booking_period: Optional[int] = Query(1, ge=1, le=12,
-                                              description="Период прогнозирования спроса для рейса (в годах)",
-                                              example='1'),
+        booking_start: Optional[date] = Query(None,
+                                              description="Период для просмотра стартовая дата",
+                                              example='2018-05-29'),
+        booking_end: Optional[date] = Query(None,
+                                            description="Период для просмотра конечная дата",
+                                            example='2019-12-31')
 
 ):
     """
     Определение динамики бронирований рейса в разрезе
     классов бронирования по вылетевшим рейсам.
     """
-    return sample_data
+    try:
+
+        query = session.query(
+            ClassBronSeason.SDAT_S,
+            ClassBronSeason.Increment_day,
+        )
+
+        query = query.filter(
+            ClassBronSeason.FLT_NUM == flight_number,
+            ClassBronSeason.SEG_CLASS_CODE == booking_class,
+        )
+
+        if booking_end and booking_start:
+            query = query.filter(
+                ClassBronSeason.SDAT_S.between(booking_start, booking_end),
+            )
+        else:
+            pass
+
+        dates_receipt = []
+        increments_days = []
+
+        for result in query.all():
+            sdat_s = result.SDAT_S
+            increment_day = result.Increment_day
+
+            dates_receipt.append(sdat_s)
+            increments_days.append(increment_day)
+
+        return sample_data
+
+    except Exception as e:
+        return {'status': 500, 'error': str(e)}
 
 
 @router.get("/demand-profile")
