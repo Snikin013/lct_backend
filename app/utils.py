@@ -15,10 +15,10 @@ def process_result_dynamic_data(series_data, dates_receipt):
                     "enabled": False,
                 },
                 "stroke": {
-                    "width": [1, 6, 6, 6, 3],
+                    "width": [6, 6, 6, 6, 3],
                     "curve": "straight",
                 },
-                "colors": ["#02458d", "#f37b09", "#ce003d", "1c1475"],
+                "colors": ["#02458d", "#f37b09", "#ce003d", "#8a8b99"],
                 "grid":
                     {
                         "borderColor": "#e7e7e7",

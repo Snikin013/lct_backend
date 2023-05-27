@@ -79,11 +79,6 @@ async def get_booking_dynamics(
             return {'status': 400, 'error': 'Некорректные данные. Один или несколько списков пустые.'}
 
         series_data = [{'series': []}]
-        series_data[0]['series'].append({
-            'name': 'Бронирование за день',
-            'type': 'column',
-            'data': increments_days
-        })
 
         for booking_class in booking_classes:
 
@@ -106,6 +101,12 @@ async def get_booking_dynamics(
                     'type': 'line',
                     'data': [0, 0, 0, 0, 0, 0, 0, 0]
                 })
+
+        series_data[0]['series'].append({
+            'name': 'Бронирование за день',
+            'type': 'column',
+            'data': increments_days
+        })
 
         res_data = process_result_dynamic_data(series_data, dates_receipt)
 
