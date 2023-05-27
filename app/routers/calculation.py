@@ -44,6 +44,8 @@ async def get_booking_dynamics(
     классов бронирования по вылетевшим рейсам.
     """
     try:
+        booking_classes = booking_class.replace(" ", "").split(",")
+
         flight_date_obj = datetime.strptime(flight_date, "%Y-%m-%d").date()
 
         booking_period_start_date = flight_date_obj - timedelta(days=booking_period * 30)
@@ -58,28 +60,54 @@ async def get_booking_dynamics(
         query = query.filter(
             BookingBronIncrement.FLT_NUM == flight_number,
             BookingBronIncrement.DD == flight_date,
-            BookingBronIncrement.SEG_CLASS_CODE == booking_class,
-            BookingBronIncrement.DTD >= 0,
+            BookingBronIncrement.SEG_CLASS_CODE.in_(booking_classes),
             BookingBronIncrement.SDAT_S.between(booking_period_start_date, booking_period_end_date),
+            BookingBronIncrement.DTD >= 0,
+
         )
 
         dates_receipt = []
         increments_days = []
-        pass_bks = []
-
         for result in query.all():
             sdat_s = result.SDAT_S
-            increment_day = result.Increment_day
-            pass_bk = result.PASS_BK
+            increments_day = result.Increment_day
 
+            increments_days.append(increments_day)
             dates_receipt.append(sdat_s)
-            increments_days.append(increment_day)
-            pass_bks.append(pass_bk)
 
-        if not dates_receipt or not increments_days or not pass_bks:
+        if not dates_receipt or not increments_days:
             return {'status': 400, 'error': 'Некорректные данные. Один или несколько списков пустые.'}
 
-        res_data = process_result_dynamic_data(dates_receipt, increments_days, pass_bks)
+        series_data = [{'series': []}]
+        series_data[0]['series'].append({
+            'name': 'Бронирование за день',
+            'type': 'column',
+            'data': increments_days
+        })
+
+        for booking_class in booking_classes:
+
+            pass_query = query.filter(
+                BookingBronIncrement.SEG_CLASS_CODE == booking_class,
+                BookingBronIncrement.DTD >= 0,
+            )
+
+            pass_bks = [result.PASS_BK for result in pass_query.all()]
+
+            if pass_bks:
+                series_data[0]['series'].append({
+                    'name': f'Суммарное бронирование {booking_class}',
+                    'type': 'line',
+                    'data': pass_bks
+                })
+            else:
+                series_data[0]['series'].append({
+                    'name': f'Данных для класс {booking_class} не найдено',
+                    'type': 'line',
+                    'data': [0, 0, 0, 0, 0, 0, 0, 0]
+                })
+
+        res_data = process_result_dynamic_data(series_data, dates_receipt)
 
         return {'status': 200, "data": res_data}
 

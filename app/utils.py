@@ -1,19 +1,8 @@
-def process_result_dynamic_data(dates_receipt, increments_days, pass_bks):
+def process_result_dynamic_data(series_data, dates_receipt):
     """Формирование данных для построения графика."""
+
     data = {
-        "series":
-            [
-                {
-                    "name": "Суммарное бронирование",
-                    "type": "line",
-                    "data": pass_bks,
-                },
-                {
-                    "name": "Бронирование за день",
-                    "type": "column",
-                    "data": increments_days,
-                },
-            ],
+        "series": series_data[0]['series'],
 
         "chart_options":
             {
@@ -26,10 +15,10 @@ def process_result_dynamic_data(dates_receipt, increments_days, pass_bks):
                     "enabled": False,
                 },
                 "stroke": {
-                    "width": [6, 1, 3],
+                    "width": [1, 6, 6, 6, 3],
                     "curve": "straight",
                 },
-                "colors": ["#f37b09", "#02458d"],
+                "colors": ["#02458d", "#f37b09", "#ce003d", "1c1475"],
                 "grid":
                     {
                         "borderColor": "#e7e7e7",
