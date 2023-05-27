@@ -102,11 +102,12 @@ async def get_booking_dynamics(
                     'data': [0, 0, 0, 0, 0, 0, 0, 0]
                 })
 
-        series_data[0]['series'].append({
-            'name': 'Бронирование за день',
-            'type': 'column',
-            'data': increments_days
-        })
+        if len(booking_classes) == 1:
+            series_data[0]['series'].append({
+                'name': 'Бронирование за день',
+                'type': 'column',
+                'data': increments_days
+            })
 
         res_data = process_result_dynamic_data(series_data, dates_receipt)
 

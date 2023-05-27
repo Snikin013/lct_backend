@@ -15,7 +15,7 @@ def process_result_dynamic_data(series_data, dates_receipt):
                     "enabled": False,
                 },
                 "stroke": {
-                    "width": [6, 6, 6, 6, 3],
+                    "width": [5, 5, 5, 5, 3],
                     "curve": "straight",
                 },
                 "colors": ["#02458d", "#f37b09", "#ce003d", "#8a8b99"],
@@ -28,62 +28,90 @@ def process_result_dynamic_data(series_data, dates_receipt):
                         },
                     },
 
-                "xaxis":
+                "xaxis": {
+                    "type": "datetime",
+                    "categories": dates_receipt,
+                },
+                "yaxis": [
                     {
-                        "type": "datetime",
-                        "categories": dates_receipt,
+                        "show": True,
+                        "showAlways": False,
+                        "showForNullSeries": True,
+                        "opposite": False,
+                        "reversed": False,
+                        "logarithmic": False,
+                        "logBase": 10,
+                        "tickAmount": 10,
+                        "forceNiceScale": False,
+                        "floating": False,
+                        "labels": {
+                            "show": True,
+                            "minWidth": 0,
+                            "maxWidth": 160,
+                            "offsetX": 0,
+                            "offsetY": 0,
+                            "rotate": 0,
+                            "padding": 20,
+                            "style": {
+                                "colors": "black",
+                                "fontSize": "11px",
+                                "fontWeight": 400,
+                                "cssClass": "",
+                            },
+                        },
+                        "axisBorder": {
+                            "show": True,
+                            "color": "black",
+                            "width": 1,
+                            "offsetX": 0,
+                            "offsetY": 0,
+                        },
+                        "axisTicks": {
+                            "show": True,
+                            "color": "black",
+                            "width": 6,
+                            "offsetX": 0,
+                            "offsetY": 0,
+                        },
+                        "title": {
+                            "rotate": -90,
+                            "offsetY": 0,
+                            "offsetX": 0,
+                            "style": {
+                                "fontSize": "11px",
+                                "fontWeight": 900,
+                                "cssClass": "",
+                            },
+                        },
                     },
-                "yaxis":
-                    [
-                        {
-                            "tickAmount": 10,
-                            "axisTicks": {
-                                "show": True,
-                            },
-                            "axisBorder": {
-                                "show": True,
-                                "color": "#f37b09",
-                            },
-                            "labels": {
-                                "style": {
-                                    "colors": "#f37b09",
-                                },
-                            },
-                            "tooltip": {
-                                "enabled": True,
-                            },
-                        },
-                        {
-                            "opposite": True,
-                            "axisTicks": {
-                                "show": True,
-                            },
-                            "axisBorder": {
-                                "show": True,
-                                "color": "#02458d",
-                            },
-                            "labels": {
-                                "style": {
-                                    "colors": "#02458d",
-                                },
-                            },
-                        },
-                    ],
+                ],
                 "tooltip":
                     {
-                        "fixed": {
-                            "enabled": True,
-                            "position": "topLeft",
-                            "offsetY": 30,
-                            "offsetX": 60,
+                        "enabled": True,
+                        "offsetX": 0,
+                        "crosshairs": {
+                            "show": True,
+                            "position": "front",
+                            "stroke": {
+                                "color": "#b6b6b6",
+                                "width": 1,
+                                "dashArray": 0
+                            }
                         },
-                    },
-                "legend":
-                    {
-                        "horizontalAlign": "left",
-                        "offsetX": 40,
-                    },
-            }
+                        "tooltip": {
+                            "fixed": {
+                                "enabled": True,
+                                "position": "topLeft",
+                                "offsetY": 30,
+                                "offsetX": 60
+                            }
+                        },
+                        "legend": {
+                            "horizontalAlign": "left",
+                            "offsetX": 40
+                        }
+                    }
+            },
     }
 
     return data
