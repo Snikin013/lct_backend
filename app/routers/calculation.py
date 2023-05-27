@@ -59,6 +59,7 @@ async def get_booking_dynamics(
             BookingBronIncrement.FLT_NUM == flight_number,
             BookingBronIncrement.DD == flight_date,
             BookingBronIncrement.SEG_CLASS_CODE == booking_class,
+            BookingBronIncrement.DTD >= 0,
             BookingBronIncrement.SDAT_S.between(booking_period_start_date, booking_period_end_date),
         )
 
