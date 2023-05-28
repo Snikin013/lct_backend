@@ -107,10 +107,10 @@ async def get_booking_dynamics(
 async def get_seasonality(
         flight_number: str = Query(..., description="Номер рейса", example="1120"),
         booking_class: str = Query(..., description="Класс бронирования", example="Y"),
-        booking_start: Optional[date] = Query(None,
+        booking_start: Optional[date] = Query(...,
                                               description="Период для просмотра стартовая дата",
                                               example='2018-05-29'),
-        booking_end: Optional[date] = Query(None,
+        booking_end: Optional[date] = Query(...,
                                             description="Период для просмотра конечная дата",
                                             example='2019-12-31')
 
@@ -129,14 +129,8 @@ async def get_seasonality(
         query = query.filter(
             ClassBronSeason.FLT_NUM == flight_number,
             ClassBronSeason.SEG_CLASS_CODE == booking_class,
+            ClassBronSeason.SDAT_S.between(booking_start, booking_end)
         )
-
-        if booking_end and booking_start:
-            query = query.filter(
-                ClassBronSeason.SDAT_S.between(booking_start, booking_end),
-            )
-        else:
-            pass
 
         dates_receipt = []
         increments_days = []

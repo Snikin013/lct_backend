@@ -233,7 +233,18 @@ def process_result_season_data(
     data = {
         "graph": {
             "data": {
-                "series": series_data[0]['series'],
+                "series": [
+                    {
+                        "name": "TE",
+                        "type": "column",
+                        "data": [40, 40, 30, 23, 59, 46, 20, 35, 45],
+                    },
+                    {
+                        "name": "Servings",
+                        "type": "line",
+                        "data": [0, 10, 20, 30, 22, 43, 21, 33, 45],
+                    },
+                ],
                 "chart_options": {
                     "annotations": {
                         "points": [
