@@ -4,8 +4,11 @@ from typing import Optional
 from fastapi import Query, APIRouter
 
 from app.database import session
-from app.utils import process_result_dynamic_data
 from app.models import BookingBronIncrement, ClassBronSeason
+from app.utils import (
+    process_result_dynamic_single_data,
+    process_result_dynamic_multiple_data,
+)
 
 router = APIRouter(prefix='/api/v1/calculation', tags=['calculation'])
 
@@ -108,8 +111,9 @@ async def get_booking_dynamics(
                 'type': 'column',
                 'data': increments_days
             })
-
-        res_data = process_result_dynamic_data(series_data, dates_receipt)
+            res_data = process_result_dynamic_single_data(series_data, dates_receipt)
+        else:
+            res_data = process_result_dynamic_multiple_data(series_data, dates_receipt)
 
         return {'status': 200, "data": res_data}
 
@@ -162,6 +166,9 @@ async def get_seasonality(
             dates_receipt.append(sdat_s)
             increments_days.append(increment_day)
 
+        if not dates_receipt or not increments_days:
+            return {'status': 400, 'error': 'Некорректные данные. Один или несколько списков пустые.'}
+
         return sample_data
 
     except Exception as e:
@@ -188,14 +195,12 @@ async def get_demand_profile(
 
 @router.get("/demand-forecast")
 async def get_demand_forecast(
-        direction: str = Query(..., description="Направление рейса", example="Москва - Сочи"),
-        flight_number: str = Query(..., description="Номер рейса", example="1120"),
-        booking_start: Optional[date] = Query(None,
-                                              description="Период для просмотра динамики бронирования стартовая дата",
-                                              example='2018-05-29'),
-        booking_end: Optional[date] = Query(None,
-                                            description="Период для просмотра динамики бронирования конечная дата",
-                                            example='2019-12-31')
+        flight_number: int = Query(..., description="Номер рейса", example="1120"),
+        flight_date: str = Query(..., description="Дата рейса", example="2018-05-29"),
+        booking_class: str = Query(..., description="Класс бронирования", example="Y"),
+        booking_period: Optional[int] = Query(1, ge=1, le=12,
+                                              description="Период прогнозирования спроса для рейса (в месяцах)",
+                                              example='1'),
 ):
     """
     Прогнозирование спроса в разрезе классов бронирования для продаваемых рейсов.
