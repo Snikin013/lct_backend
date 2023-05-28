@@ -63,6 +63,9 @@ def process_result_dynamic_multiple_data(
                                 "fontWeight": 400,
                                 "cssClass": "",
                             },
+                            "tooltip": {
+                                "enabled": True,
+                            },
                         },
                         "axisBorder": {
                             "show": True,
@@ -90,32 +93,29 @@ def process_result_dynamic_multiple_data(
                         },
                     },
                 ],
-                "tooltip":
-                    {
+                "tooltip": {
+                    "enabled": True,
+                    "shared": True,
+                    "intersect": False,
+                    "followCursor": True,
+                    "marker": {
+                        "show": False,
+                    },
+                    "x": {
+                        "format": "dd MMM yyyy",
+                    },
+                    "fixed": {
                         "enabled": True,
-                        "offsetX": 0,
-                        "crosshairs": {
-                            "show": True,
-                            "position": "front",
-                            "stroke": {
-                                "color": "#b6b6b6",
-                                "width": 1,
-                                "dashArray": 0
-                            }
-                        },
-                        "tooltip": {
-                            "fixed": {
-                                "enabled": True,
-                                "position": "topLeft",
-                                "offsetY": 30,
-                                "offsetX": 60
-                            }
-                        },
-                        "legend": {
-                            "horizontalAlign": "left",
-                            "offsetX": 40
-                        }
-                    }
+                        "position": "topLeft",
+                        "offsetY": 30,
+                        "offsetX": 60,
+                    },
+                },
+                "legend": {
+                    "horizontalAlign": "left",
+                    "offsetX": 40,
+                    "fontSize": "17px",
+                },
             },
     }
 
@@ -132,87 +132,93 @@ def process_result_dynamic_single_data(
 
     data = {
         "series": series_data[0]['series'],
+        "chart_options": {
+            "chart": {
+                "height": 500,
+                "type": "line",
+                "stacked": False,
+            },
+            "dataLabels": {
+                "enabled": False,
+            },
+            "stroke": {
+                "width": [6, 1, 3],
+                "curve": "straight",
+            },
+            "colors": ["#f37b09", "#02458d"],
+            "grid": {
+                "borderColor": "#e7e7e7",
+                "row": {
+                    "colors": ["#f3f3f3", "transparent"],
+                    "opacity": 0.5,
+                },
+            },
 
-        "chart_options":
-            {
-                "chart": {
-                    "height": 500,
-                    "type": "line",
-                    "stacked": False,
+            "xaxis": {
+                "type": "datetime",
+                "categories": dates_receipt,
+            },
+            "yaxis": [
+                {
+                    "axisTicks": {
+                        "show": True,
+                    },
+                    "axisBorder": {
+                        "show": True,
+                        "color": "#f37b09",
+                    },
+                    "labels": {
+                        "style": {
+                            "colors": "#f37b09",
+                        },
+                    },
+                    "tooltip": {
+                        "enabled": True,
+                    },
                 },
-                "dataLabels": {
-                    "enabled": False,
+                {
+                    "opposite": True,
+                    "axisTicks": {
+                        "show": True,
+                    },
+                    "axisBorder": {
+                        "show": True,
+                        "color": "#02458d",
+                    },
+                    "labels": {
+                        "style": {
+                            "colors": "#02458d",
+                        },
+                    },
+                    "tooltip": {
+                        "enabled": True,
+                    },
                 },
-                "stroke": {
-                    "width": [6, 1, 3],
-                    "curve": "straight",
+            ],
+            "tooltip": {
+                "enabled": True,
+                "shared": True,
+                "intersect": False,
+                "followCursor": True,
+                "marker": {
+                    "show": False,
                 },
-                "colors": ["#f37b09", "#02458d"],
-                "grid":
-                    {
-                        "borderColor": "#e7e7e7",
-                        "row": {
-                            "colors": ["#f3f3f3", "transparent"],
-                            "opacity": 0.5,
-                        },
-                    },
-
-                "xaxis":
-                    {
-                        "type": "datetime",
-                        "categories": dates_receipt,
-                    },
-                "yaxis":
-                    [
-                        {
-                            "tickAmount": 10,
-                            "axisTicks": {
-                                "show": True,
-                            },
-                            "axisBorder": {
-                                "show": True,
-                                "color": "#f37b09",
-                            },
-                            "labels": {
-                                "style": {
-                                    "colors": "#f37b09",
-                                },
-                            },
-                            "tooltip": {
-                                "enabled": True,
-                            },
-                        },
-                        {
-                            "opposite": True,
-                            "axisTicks": {
-                                "show": True,
-                            },
-                            "axisBorder": {
-                                "show": True,
-                                "color": "#02458d",
-                            },
-                            "labels": {
-                                "style": {
-                                    "colors": "#02458d",
-                                },
-                            },
-                        },
-                    ],
-                "tooltip":
-                    {
-                        "fixed": {
-                            "enabled": True,
-                            "position": "topLeft",
-                            "offsetY": 30,
-                            "offsetX": 60,
-                        },
-                    },
-                "legend":
-                    {
-                        "horizontalAlign": "left",
-                        "offsetX": 40,
-                    },
-            }
+                "x": {
+                    "format": "dd MMM yyyy",
+                },
+                "fixed": {
+                    "enabled": True,
+                    "position": "topLeft",
+                    "offsetY": 30,
+                    "offsetX": 60,
+                },
+            },
+            "legend": {
+                "horizontalAlign": "left",
+                "offsetX": 40,
+                "fontSize": "17px",
+            },
+        },
     }
 
     return data
@@ -224,132 +230,203 @@ def process_result_season_data(
     """
     Формирование данных для построения графика сезонов.
     """
-    data = {"graph": {
-        "data": {
-            "series": [
-                {
-                    "name": "TE",
-                    "type": "column",
-                    "data": [40, 40, 30, 23, 59, 46, 20, 35, 45],
-                },
-                {
-                    "name": "Servings",
-                    "type": "line",
-                    "data": [0, 10, 20, 30, 22, 43, 21, 33, 45],
-                },
-            ],
-            "chart_options": {
-                "annotations": {
-                    "points": [
-                        {
-                            "x": "Январь",
-                            "seriesIndex": 0,
-                            "label": {
-                                "borderColor": "#775DD0",
-                                "offsetY": 0,
-                                "style": {
-                                    "color": "#fff",
-                                    "background": "#775DD0",
+    data = {
+        "graph": {
+            "data": {
+                "series": series_data[0]['series'],
+                "chart_options": {
+                    "annotations": {
+                        "points": [
+                            {
+                                "x": "Январь",
+                                "seriesIndex": 0,
+                                "label": {
+                                    "borderColor": "#775DD0",
+                                    "offsetY": 0,
+                                    "style": {
+                                        "color": "#fff",
+                                        "background": "#775DD0",
+                                    },
+                                    "text": "Зимний",
                                 },
-                                "text": "Зимний",
                             },
-                        },
-                        {
-                            "x": "Февраль",
-                            "seriesIndex": 0,
-                            "label": {
-                                "borderColor": "#775DD0",
-                                "offsetY": 0,
-                                "style": {
-                                    "color": "#fff",
-                                    "background": "#775DD0",
+                            {
+                                "x": "Февраль",
+                                "seriesIndex": 0,
+                                "label": {
+                                    "borderColor": "#775DD0",
+                                    "offsetY": 0,
+                                    "style": {
+                                        "color": "#fff",
+                                        "background": "#775DD0",
+                                    },
+                                    "text": "Зимний",
                                 },
-                                "text": "Зимний",
                             },
+                        ],
+                    },
+                    "chart": {
+                        "height": 500,
+                        "type": "bar",
+                    },
+                    "plotOptions": {
+                        "bar": {
+                            "borderRadius": 10,
+                            "columnWidth": "100%",
                         },
-                    ],
-                },
-                "chart": {
-                    "height": 500,
-                    "type": "bar",
-                },
-                "plotOptions": {
-                    "bar": {
-                        "borderRadius": 10,
-                        "columnWidth": "100%",
                     },
-                },
-                "dataLabels": {
-                    "enabled": False,
-                },
-                "stroke": {
-                    "width": [1, 6, 3],
-                    "curve": "straight",
-                },
-                "colors": ["#02458d", "#f37b09", "#237es9"],
-                "grid": {
-                    "row": {
-                        "colors": ["#fff", "#f2f2f2"],
+                    "dataLabels": {
+                        "enabled": False,
                     },
-                },
-                "xaxis": {
-                    "labels": {
-                        "rotate": -45,
+                    "stroke": {
+                        "width": [1, 6, 3],
+                        "curve": "straight",
                     },
-                    "categories": [
-                        "Январь",
-                        "Февраль",
-                        "Март",
-                        "Апрель",
-                        "Май",
-                        "Июнь",
-                        "Июль",
-                        "Август",
-                        "Сентябрь",
-                    ],
-                },
-                "yaxis": {
-                    "title": {
-                        "text": "Servings",
+                    "colors": ["#02458d", "#f37b09", "#237es9"],
+                    "grid": {
+                        "row": {
+                            "colors": ["#fff", "#f2f2f2"],
+                        },
                     },
-                },
-                "fill": {
-                    "type": "gradient",
-                    "gradient": {
-                        "shade": "light",
-                        "type": "horizontal",
-                        "shadeIntensity": 0.25,
-                        "gradientToColors": "undefined",
-                        "inverseColors": True,
-                        "opacityFrom": 0.85,
-                        "opacityTo": 0.85,
-                        "stops": [50, 0, 100],
+                    "xaxis": {
+                        "labels": {
+                            "rotate": -45,
+                        },
+                        "categories": [
+                            "Январь",
+                            "Февраль",
+                            "Март",
+                            "Апрель",
+                            "Май",
+                            "Июнь",
+                            "Июль",
+                            "Август",
+                            "Сентябрь",
+                        ],
+                    },
+                    "yaxis": {
+                        "title": {
+                            "text": "Servings",
+                        },
+                    },
+                    "fill": {
+                        "type": "gradient",
+                        "gradient": {
+                            "shade": "light",
+                            "type": "horizontal",
+                            "shadeIntensity": 0.25,
+                            "gradientToColors": "undefined",
+                            "inverseColors": True,
+                            "opacityFrom": 0.85,
+                            "opacityTo": 0.85,
+                            "stops": [50, 0, 100],
+                        },
                     },
                 },
             },
         },
-    },
     }
 
     return data
 
 
-def get_airport_by_city():
-    """Получение аэропорта по городу."""
-    return {
-        "Москва": "SVO",
-        "Сочи": "AER",
-        "Астрахань": "ASF"
+def process_result_demand_forecast_data(dates_receipt, increments_days, pass_bks):
+    """
+    Формирование данных для построения графика предсказаний.
+    """
+    data = {
+        "series": [
+            {
+                "name": "Бронирование за день",
+                "type": "column",
+                "data": increments_days,
+            },
+            {
+                "name": "Суммарное бронирование",
+                "type": "line",
+                "data": pass_bks,
+            },
+        ],
+        "chart_options": {
+            "chart": {
+                "height": 350,
+                "type": "line",
+                "stacked": False,
+            },
+            "dataLabels": {
+                "enabled": False,
+            },
+            "stroke": {
+                "width": [1, 6, 3],
+                "curve": "straight",
+            },
+            "colors": ["#02458d", "#f37b09"],
+            "grid": {
+                "borderColor": "#e7e7e7",
+                "row": {
+                    "colors": ["#f3f3f3", "transparent"],
+                    "opacity": 0.5,
+                },
+            },
+            "title": {
+                "text": "Динамика бронирования рейса",
+                "align": "left",
+                "offsetX": 110,
+            },
+            "xaxis": {
+                "categories": dates_receipt,
+            },
+            "yaxis": [
+                {
+                    "axisTicks": {
+                        "show": True,
+                    },
+                    "axisBorder": {
+                        "show": True,
+                        "color": "#02458d",
+                    },
+                    "labels": {
+                        "style": {
+                            "colors": "#02458d",
+                        },
+                    },
+                    "tooltip": {
+                        "enabled": "true",
+                    },
+                },
+                {
+                    "opposite": True,
+                    "axisTicks": {
+                        "show": True,
+                        "color": "#f37b09",
+                    },
+                    "axisBorder": {
+                        "show": True,
+                        "color": "#f37b09",
+                    },
+                    "labels": {
+                        "style": {
+                            "colors": "#f37b09",
+                        },
+                    },
+                },
+            ],
+            "tooltip": {
+                "fixed": {
+                    "enabled": True,
+                    "position": "topLeft",
+                    "offsetY": 30,
+                    "offsetX": 60,
+                },
+            },
+            "legend": {
+                "horizontalAlign": "left",
+                "offsetX": 40,
+            },
+        },
     }
 
-
-def get_city_by_airport_code():
-    """Получение города по аэропорту."""
-    return {
-        "SVO": "Москва",
-        "AER": "Сочи",
-        "ASF": "Астрахань",
-    }
+    return data
 
 
 def get_fly_numbers_by_direction():
@@ -375,13 +452,3 @@ def get_fly_numbers_by_direction():
 def get_fly_directions():
     """Направления полетов."""
     return ['Москва - Сочи', 'Сочи - Москва', 'Москва - Астрахань', 'Астрахань - Москва']
-
-
-def get_airport_code_direction(direction: str):
-    """Получение кода по аэропорту направления. """
-    parts = direction.replace('"', '').split('-')
-    departure_city, arrival_city = [part for part in parts]
-
-    airports = get_airport_by_city()
-
-    return airports.get(departure_city.strip()), airports.get(arrival_city.strip())
