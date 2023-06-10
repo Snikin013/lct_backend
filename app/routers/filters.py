@@ -44,3 +44,21 @@ async def get_booking_classes():
     classes = [row[0] for row in query]
 
     return {"status": 200, "booking_classes": sorted(classes)}
+
+
+@router.get('/scenarios/')
+async def get_scenarios():
+    """Сценарный прогноз"""
+    return {
+        'status': 200,
+        "scenarios": ['позитивный (+20%)', 'нейтральный (+5%)', 'негативный -(20%)', 'реальный 2020 год']
+    }
+
+
+@router.get('/cabins/')
+async def get_cabins():
+    """Фильтр кабины, необязательный."""
+    query = session.query(distinct(BookingClass.SSCL1)).all()
+    classes = [row[0] for row in query]
+
+    return {"status": 200, "cabin_classes": sorted(classes)}

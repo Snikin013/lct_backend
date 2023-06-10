@@ -28,7 +28,7 @@ pip install -r requirements.txt
 1. Запустите backend-сервер:
 
 ```shell
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```
 
 2. После запуска сервер будет доступен по адресу `http://localhost:8000`.

@@ -231,136 +231,99 @@ def process_result_season_data(
     Формирование данных для построения графика сезонов.
     """
     data = {
-        "graph": {
-            "data": {
-                "series": [
-                    {
-                        "name": "TE",
-                        "type": "column",
-                        "data": [40, 40, 30, 23, 59, 46, 20, 35, 45],
-                    },
-                    {
-                        "name": "Servings",
-                        "type": "line",
-                        "data": [0, 10, 20, 30, 22, 43, 21, 33, 45],
-                    },
-                ],
-                "chart_options": {
-                    "annotations": {
-                        "points": [
-                            {
-                                "x": "Январь",
-                                "seriesIndex": 0,
-                                "label": {
-                                    "borderColor": "#775DD0",
-                                    "offsetY": 0,
-                                    "style": {
-                                        "color": "#fff",
-                                        "background": "#775DD0",
-                                    },
-                                    "text": "Зимний",
-                                },
-                            },
-                            {
-                                "x": "Февраль",
-                                "seriesIndex": 0,
-                                "label": {
-                                    "borderColor": "#775DD0",
-                                    "offsetY": 0,
-                                    "style": {
-                                        "color": "#fff",
-                                        "background": "#775DD0",
-                                    },
-                                    "text": "Зимний",
-                                },
-                            },
-                        ],
-                    },
-                    "chart": {
-                        "height": 500,
-                        "type": "bar",
-                    },
-                    "plotOptions": {
-                        "bar": {
-                            "borderRadius": 10,
-                            "columnWidth": "100%",
-                        },
-                    },
-                    "dataLabels": {
-                        "enabled": False,
-                    },
-                    "stroke": {
-                        "width": [1, 6, 3],
-                        "curve": "straight",
-                    },
-                    "colors": ["#02458d", "#f37b09", "#237es9"],
-                    "grid": {
-                        "row": {
-                            "colors": ["#fff", "#f2f2f2"],
-                        },
-                    },
-                    "xaxis": {
-                        "labels": {
-                            "rotate": -45,
-                        },
-                        "categories": [
-                            "Январь",
-                            "Февраль",
-                            "Март",
-                            "Апрель",
-                            "Май",
-                            "Июнь",
-                            "Июль",
-                            "Август",
-                            "Сентябрь",
-                        ],
-                    },
-                    "yaxis": {
-                        "title": {
-                            "text": "Servings",
-                        },
-                    },
-                    "fill": {
-                        "type": "gradient",
-                        "gradient": {
-                            "shade": "light",
-                            "type": "horizontal",
-                            "shadeIntensity": 0.25,
-                            "gradientToColors": "undefined",
-                            "inverseColors": True,
-                            "opacityFrom": 0.85,
-                            "opacityTo": 0.85,
-                            "stops": [50, 0, 100],
-                        },
-                    },
-                },
+        "series": series_data[0]['series'],
+        "chart_options": {
+            "chart": {
+                "height": 500,
+                "type": "line",
+                "stacked": True,
+                "animations": {
+                    "enabled": False
+                }
             },
-        },
+            "plotOptions": {
+                "bar": {
+                    "columnWidth": "100%"
+                }
+            },
+            "dataLabels": {
+                "enabled": False
+            },
+            "stroke": {
+                "width": [3],
+                "curve": "straight"
+            },
+            "noData": "Данных нет",
+            "colors": [
+                "#ce003d",
+                "#de7008",
+                "#578ad6",
+                "#d4470f",
+                "#7f7f7e",
+                "#de8703",
+                "#d9d6d1",
+                "#003896",
+                "#b3c7e3",
+                "#d2cbbf",
+                "#f25900",
+                "fa9e0d",
+                "#002469",
+                "1c1475",
+                "#8a8b99"
+            ],
+            "xaxis": {
+                "type": "datetime",
+                "categories": dates_receipt,
+            },
+            "yaxis": [
+                {
+                    "tickAmount": 10,
+                    "axisTicks": {
+                        "show": True
+                    },
+                    "axisBorder": {
+                        "show": True,
+                        "color": "#02458d"
+                    },
+                    "labels": {
+                        "style": {
+                            "colors": "#02458d"
+                        }
+                    }
+                }
+            ],
+            "tooltip": {
+                "enabled": True,
+                "shared": False,
+                "intersect": False,
+                "followCursor": True,
+                "marker": {
+                    "show": False
+                },
+                "fixed": {
+                    "enabled": True,
+                    "position": "topLeft",
+                    "offsetY": 30,
+                    "offsetX": 60
+                }
+            }
+        }
     }
 
     return data
 
 
-def process_result_demand_forecast_data(dates_receipt, increments_days, pass_bks):
+def process_result_demand_forecast_data(
+        series_data: list, dates_receipt: list
+) -> dict:
     """
     Формирование данных для построения графика предсказаний.
     """
     data = {
-        "series": [
-            {
-                "name": "Бронирование за день",
-                "type": "column",
-                "data": increments_days,
-            },
-            {
-                "name": "Суммарное бронирование",
-                "type": "line",
-                "data": pass_bks,
-            },
-        ],
+        "series": series_data[0]['series'],
         "chart_options": {
             "chart": {
-                "height": 350,
+                "height": 500,
                 "type": "line",
                 "stacked": False,
             },
@@ -368,10 +331,10 @@ def process_result_demand_forecast_data(dates_receipt, increments_days, pass_bks
                 "enabled": False,
             },
             "stroke": {
-                "width": [1, 6, 3],
+                "width": [5, 5, 5, 5, 3],
                 "curve": "straight",
             },
-            "colors": ["#02458d", "#f37b09"],
+            "colors": ["#02458d", "#f37b09", "#ce003d", "#8a8b99"],
             "grid": {
                 "borderColor": "#e7e7e7",
                 "row": {
@@ -379,12 +342,9 @@ def process_result_demand_forecast_data(dates_receipt, increments_days, pass_bks
                     "opacity": 0.5,
                 },
             },
-            "title": {
-                "text": "Динамика бронирования рейса",
-                "align": "left",
-                "offsetX": 110,
-            },
+
             "xaxis": {
+                "type": "datetime",
                 "categories": dates_receipt,
             },
             "yaxis": [
@@ -402,37 +362,32 @@ def process_result_demand_forecast_data(dates_receipt, increments_days, pass_bks
                         },
                     },
                     "tooltip": {
-                        "enabled": "true",
-                    },
-                },
-                {
-                    "opposite": True,
-                    "axisTicks": {
-                        "show": True,
-                        "color": "#f37b09",
-                    },
-                    "axisBorder": {
-                        "show": True,
-                        "color": "#f37b09",
-                    },
-                    "labels": {
-                        "style": {
-                            "colors": "#f37b09",
-                        },
+                        "enabled": True,
                     },
                 },
             ],
             "tooltip": {
+                "enabled": True,
+                "shared": True,
+                "intersect": False,
+                "followCursor": True,
+                "marker": {
+                    "show": False,
+                },
+                "x": {
+                    "format": "dd MMM yyyy",
+                },
                 "fixed": {
                     "enabled": True,
                     "position": "topLeft",
-                    "offsetY": 30,
-                    "offsetX": 60,
+                    "offsetY": 35,
+                    "offsetX": 70,
                 },
             },
             "legend": {
                 "horizontalAlign": "left",
                 "offsetX": 40,
+                "fontSize": "17px",
             },
         },
     }
